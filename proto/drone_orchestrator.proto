@@ -15,8 +15,13 @@ service DroneOrchestratorService {
 // the drone.
 message DroneRequest {
   oneof data {
+    // Data passed from orchestrator to drone during registration.
     InitResponse init_response = 1;
+
+    // Framework-level request issued from orchestrator to drone.
     Framework framework = 2;
+
+    // Application-level request issued from orchestrator to drone.
     App app = 3;
   }
 
@@ -46,8 +51,13 @@ message DroneRequest {
 // registration, drones should only send these in response to requests sent by orchestrators.
 message DroneResponse {
   oneof data {
+    // Set when a drone is establishing a connection with an orchestrator.
     InitRequest init = 1;
+
+    // Drone response to a framework-level request.
     Framework framework = 2;
+
+    // Drone response to an application-level request.
     App app = 3;
   }
 
