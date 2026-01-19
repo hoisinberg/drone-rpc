@@ -27,23 +27,26 @@ message DroneRequest {
 
   // Sent by orchestrators to drones confirming registration success.
   message InitResponse {
-    google.protobuf.Any data = 1;
+    // Framework-level metadata associated with drone registration.
+    Metadata metadata = 1;
+
+    // Application-level data associated with drone registration.
+    google.protobuf.Any data = 2;
+
+    message Metadata {}
   }
 
   // Sent from orchestrators to drones for framework-level requests like health checks.
-  message Framework {
-    google.protobuf.Any data = 1;
-  }
+  message Framework {}
 
   // Sent from orchestators to drones in order to initiate application-level requests.
   message App {
+    // Framework-level metadata associated with application-level requests.
     Metadata metadata = 1;
-    google.protobuf.Any data = 2;
-  }
 
-  // Framework-level metadata associated with application-level requests.
-  message Metadata {
-    google.protobuf.Any data = 1;
+    google.protobuf.Any data = 2;
+
+    message Metadata {}
   }
 }
 
@@ -63,22 +66,25 @@ message DroneResponse {
 
   // Sent by drones during startup to establish a connection with an orchestrator.
   message InitRequest {
-    google.protobuf.Any data = 1;
+    // Framework-level metadata associated with drone registration.
+    Metadata metadata = 1;
+
+    // Application-level data associated with drone registration.
+    google.protobuf.Any data = 2;
+
+    message Metadata {}
   }
 
   // Sent from drones to orchestrators in response to framework-level requests like health checks.
-  message Framework {
-    google.protobuf.Any data = 1;
-  }
+  message Framework {}
 
   // Sent from drones to orchestrators in response to application-level requests.
   message App {
+    // Framework-level metadata associated with application-level responses.
     Metadata metadata = 1;
-    google.protobuf.Any data = 2;
-  }
 
-  // Framework-level metadata associated with application-level responses.
-  message Metadata {
-    google.protobuf.Any data = 1;
+    google.protobuf.Any data = 2;
+
+    message Metadata {}
   }
 }
