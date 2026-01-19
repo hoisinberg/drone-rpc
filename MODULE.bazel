@@ -1,0 +1,6 @@
+module(
+  name = "drone-rpc",
+  version = "1.0",
+)
+
+bazel_dep(name = "protobuf", version = "33.4")

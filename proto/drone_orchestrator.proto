@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+// RPC service exposed by orchestrators to drones, allowing drones to register themselves with the
+// orchestrator from which they will receive commands.
+service DroneOrchestratorService {
+
+  // Expected to be invoked by drones as part of worker startup. Once the bidi stream is
+  // established, it is used to propagate commands from the orchestrator to the worker.
+  rpc RegisterDrone(stream DroneResponse) returns (stream DroneRequest) {}
+}
+
+// Requests sent from orchestrators to drones, representing commands sent from the orchestrator to
+// the drone.
+message DroneRequest {
+  oneof data {
+    InitResponse init_response = 1;
+    Framework framework = 2;
+    App app = 3;
+  }
+
+  // Sent by orchestrators to drones confirming registration success.
+  message InitResponse {
+    google.protobuf.Any data = 1;
+  }
+
+  // Sent from orchestrators to drones for framework-level requests like health checks.
+  message Framework {
+    google.protobuf.Any data = 1;
+  }
+
+  // Sent from orchestators to drones in order to initiate application-level requests.
+  message App {
+    Metadata metadata = 1;
+    google.protobuf.Any data = 2;
+  }
+
+  // Framework-level metadata associated with application-level requests.
+  message Metadata {
+    google.protobuf.Any data = 1;
+  }
+}
+
+// Responses sent from drones to orchestrators in response to incoming commands. Aside from
+// registration, drones should only send these in response to requests sent by orchestrators.
+message DroneResponse {
+  oneof data {
+    InitRequest init = 1;
+    Framework framework = 2;
+    App app = 3;
+  }
+
+  // Sent by drones during startup to establish a connection with an orchestrator.
+  message InitRequest {
+    google.protobuf.Any data = 1;
+  }
+
+  // Sent from drones to orchestrators in response to framework-level requests like health checks.
+  message Framework {
+    google.protobuf.Any data = 1;
+  }
+
+  // Sent from drones to orchestrators in response to application-level requests.
+  message App {
+    Metadata metadata = 1;
+    google.protobuf.Any data = 2;
+  }
+
+  // Framework-level metadata associated with application-level responses.
+  message Metadata {
+    google.protobuf.Any data = 1;
+  }
+}
