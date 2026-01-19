@@ -46,7 +46,12 @@ message DroneRequest {
 
     google.protobuf.Any data = 2;
 
-    message Metadata {}
+    message Metadata {
+      // A per-stream unique identifier used to distinguish in-flight requests from one another. The
+      // corresponding field in DroneResponse.metadata.request_id indicates which request a given
+      // response should be associated with.
+      string request_id = 1;
+    }
   }
 }
 
@@ -85,6 +90,9 @@ message DroneResponse {
 
     google.protobuf.Any data = 2;
 
-    message Metadata {}
+    message Metadata {
+      // ID of the original request associated with this response.
+      string request_id = 1;
+    }
   }
 }
